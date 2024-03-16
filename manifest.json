@@ -1,0 +1,24 @@
+{
+  "name": "Link Extractor",
+  "version": "1.0",
+  "description": "Get all the links from a website",
+  "manifest_version": 2,
+  "content_scripts": [
+      {
+          "matches": ["http://127.0.0.1:5500/testing-form.html"],
+          "js": ["content.js"],
+          "all_frames": false
+      }
+     
+  ],
+  "browser_action": {
+      "default_popup": "popup.html"
+  },
+  "permissions": [
+      "activeTab",
+      "contextMenus",
+      "declarativeContent", 
+      "storage",
+      "tabs"
+  ]
+}
