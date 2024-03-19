@@ -14,6 +14,28 @@ document.addEventListener('DOMContentLoaded', function () {
 */
 
 
+
+
+//Function for changing the content between the list of links and the path of travel
+const changeContent = ( tabSection)=> {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  console.log("Here in change content");
+  document.getElementById(tabSection).style.display = "block";
+  //evt.currentTarget.className += " active";
+
+};
+
+
 /*
   Function which will run when the mouse hovers over a link.
 */
@@ -91,6 +113,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
   });
+
+document.getElementById("LinksButton").addEventListener('click', () => {changeContent('ListOfLinks')});
+document.getElementById("PathOfTravelButton").addEventListener('click',  () => {changeContent('PathOfTravel')});
 });
 
 
