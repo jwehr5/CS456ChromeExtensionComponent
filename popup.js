@@ -41,7 +41,7 @@ const changeContent = ( tabSection)=> {
 */
  const addRedBox = async (evt) => {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.executeScript(tabs[0].id, { file: "background.js" }, function (data) {
+    chrome.tabs.executeScript(tabs[0].id, { file: "content.js" }, function (data) {
       console.log("Test 1");
       console.log(evt);
 
@@ -61,7 +61,7 @@ const changeContent = ( tabSection)=> {
 */ 
 const removeRedBox = async () => {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.executeScript(tabs[0].id, {file: "background.js"}, function (data) {
+    chrome.tabs.executeScript(tabs[0].id, {file: "content.js"}, function (data) {
       console.log("Test 2");
 
       chrome.tabs.sendMessage(tabs[0].id, "removeBox");
@@ -117,5 +117,3 @@ document.addEventListener("DOMContentLoaded", () => {
 document.getElementById("LinksButton").addEventListener('click', () => {changeContent('ListOfLinks')});
 document.getElementById("PathOfTravelButton").addEventListener('click',  () => {changeContent('PathOfTravel')});
 });
-
-

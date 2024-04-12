@@ -19,6 +19,21 @@
                 if(currentElement.href == message){
                     console.log(currentElement.href);
                     currentElement.style.border = "2px solid red";
+
+                    //Draw an arrow pointing to the link
+                    currentElement.insertAdjacentHTML('afterend', '<div id="arrow"></div>');
+                    var arrow = document.getElementById("arrow");
+
+                    arrow.style.position = "absolute";
+                    arrow.style.width = "0";
+                    arrow.style.height = "0";
+                    arrow.style.borderLeft = "40px solid transparent";
+                    arrow.style.borderRight = "40px solid transparent";
+                    arrow.style.borderBottom = "40px solid red";
+
+                    const targetRect = currentElement.getBoundingClientRect();
+                    arrow.style.left = `${targetRect.left + targetRect.width / 4}px`;
+                    arrow.style.top = `${targetRect.top + targetRect.height}px`;
                 }
             }
 
@@ -26,6 +41,12 @@
             var links = document.querySelectorAll('a');
             for(var i = 0; i < links.length; i++){
                 links[i].style.border = "";
+            }
+
+            //Remove all the arrows
+            var arrows = document.querySelectorAll("#arrow");
+            for(var i = 0; i < arrows.length; i++){
+                arrows[i].remove();
             }
         }
 
