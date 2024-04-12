@@ -11,6 +11,8 @@
       }
      
   ],
+  "content_security_policy": "script-src 'self' https://cdn.jsdelivr.net/npm/@google/generative-ai/+esm https://esm.run/@google/generative-ai;",
+
   "browser_action": {
       "default_popup": "popup.html"
   },
@@ -21,4 +23,5 @@
       "storage",
       "tabs"
   ]
+  
 }

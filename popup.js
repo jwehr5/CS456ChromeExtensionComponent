@@ -1,4 +1,8 @@
 import { getActiveTabURL } from "./utils.js";
+import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+// Access your API key (see "Set up your API key" above)
+const genAI = new GoogleGenerativeAI("AIzaSyBeXnt8CWFzQxUMTn0Bw1yhycMDQGl4K1w");
 
 /*
 document.addEventListener('DOMContentLoaded', function () {
@@ -12,6 +16,31 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 */
+
+//Function for turning text into bullet points
+const textToBulletPoints = async (input) => {
+  // For text-only input, use the gemini-pro model
+  const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+
+  const prompt = "Summarize the text into a list of bullet points and use '--' as the bullet point symbol: " + input;
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const text = response.text();
+  console.log(text);
+
+  var output = document.getElementById('response');
+
+  //Put all bullets in a list and append them to the list.
+  const bullets = text.split('--');
+  for(var i = 0; i < bullets.length; i++){
+    let listItem = document.createElement('li');
+    listItem.textContent = bullets[i];
+    output.appendChild(listItem);
+  }
+
+
+}
 
 
 
@@ -31,9 +60,15 @@ const changeContent = ( tabSection)=> {
 
   console.log("Here in change content");
   document.getElementById(tabSection).style.display = "block";
+
+
   //evt.currentTarget.className += " active";
 
 };
+
+
+
+
 
 
 /*
@@ -116,4 +151,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.getElementById("LinksButton").addEventListener('click', () => {changeContent('ListOfLinks')});
 document.getElementById("PathOfTravelButton").addEventListener('click',  () => {changeContent('PathOfTravel')});
+document.getElementById("TextBreakDownButton").addEventListener('click',  () => {changeContent('TextBreakDown')});
+document.getElementById("Convert").addEventListener('click', () => {textToBulletPoints(document.getElementById("TextInput").value)});
+
+document.getElementById("PathOfTravel").style.display = "none";
+document.getElementById("TextBreakDown").style.display = "none";
+
+
 });
