@@ -1,8 +1,10 @@
-import { getActiveTabURL } from "./utils.js";
+import {API_Key} from  "./utils.js";
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
 // Access your API key (see "Set up your API key" above)
-const genAI = new GoogleGenerativeAI("AIzaSyBeXnt8CWFzQxUMTn0Bw1yhycMDQGl4K1w");
+const genAI = new GoogleGenerativeAI(API_Key);
+
+let siteOrder = 1;
 
 /*
 document.addEventListener('DOMContentLoaded', function () {
@@ -39,6 +41,9 @@ const textToBulletPoints = async (input) => {
     output.appendChild(listItem);
   }
 
+  //Remove the first list element since its blank
+  output.querySelector('li').remove();
+
 
 }
 
@@ -61,12 +66,59 @@ const changeContent = ( tabSection)=> {
   console.log("Here in change content");
   document.getElementById(tabSection).style.display = "block";
 
+  //If we are on the path of travel tab, then update the path of travel.
+  if(tabSection == 'PathOfTravel'){
+    console.log("About to get Url");
+    getUrlOfWebsite(siteOrder);
+    siteOrder++;
+
+    var path = document.getElementById('path');
+    path.innerHTML = "";
+    chrome.storage.sync.get(all => {
+      for (const [key, val] of Object.entries(all).sort((a, b) => b[1] - a[1])) {
+        //console.log(key + " 2222222222");
+        let link = document.createElement("h3");
+        let downArrow = document.createElement("h2");
+        link.textContent = key;
+        downArrow.textContent = "↓";
+        path.appendChild(link);
+        path.appendChild(downArrow);
+        
+      }
+    });
+  }
+
 
   //evt.currentTarget.className += " active";
 
 };
 
+//Function for clearing the path of travel
+const clearPath = () =>{
+  chrome.storage.sync.clear();
+  let path = document.getElementById('path');
+  path.innerHTML = "";
+  siteOrder = 1;
 
+}
+
+
+//Function that will get the url of the website
+const getUrlOfWebsite = async (evt) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.executeScript(tabs[0].id, { file: "content.js" }, function (data) {
+      console.log("Test 3");
+      console.log(evt);
+
+      chrome.tabs.sendMessage(tabs[0].id, evt);
+        // Data is an array of values, in case it was executed in multiple tabs/frames
+        //download(data[0], "download.html", "text/html");
+        //document.getElementById("links").textContent = data[0];
+        //document.getElementById("links").style.border = "2px solid red";
+    });
+});
+
+};
 
 
 
@@ -153,6 +205,7 @@ document.getElementById("LinksButton").addEventListener('click', () => {changeCo
 document.getElementById("PathOfTravelButton").addEventListener('click',  () => {changeContent('PathOfTravel')});
 document.getElementById("TextBreakDownButton").addEventListener('click',  () => {changeContent('TextBreakDown')});
 document.getElementById("Convert").addEventListener('click', () => {textToBulletPoints(document.getElementById("TextInput").value)});
+document.getElementById("Clear").addEventListener('click', () => {clearPath()});
 
 document.getElementById("PathOfTravel").style.display = "none";
 document.getElementById("TextBreakDown").style.display = "none";

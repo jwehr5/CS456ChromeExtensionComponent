@@ -49,6 +49,14 @@
             }
         }
 
+
+        if(!isNaN(message)){
+            //Get the current url and save it in storage.
+            chrome.storage.sync.set({[document.location.origin]: message});
+            console.log("getting url");
+
+        }
+
        
     });
 
